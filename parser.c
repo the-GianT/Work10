@@ -131,7 +131,7 @@ void parse_file ( char * filename,
       
       add_sphere(edges, *args, args[1], args[2], args[3], step_3d);
       matrix_mult(cs->data[cs->top], edges); // apply transformations
-      draw_polygons(edges, s, zb, c);
+      draw_polygons(edges, s, zb, view, light, ambient, areflect, dreflect, sreflect);
       edges->lastcol = 0; // clear temporary polygon matrix
 
     } else if (strncmp(line, "torus", strlen(line)) == 0) {
@@ -150,7 +150,8 @@ void parse_file ( char * filename,
       
       add_torus(edges, *args, args[1], args[2], args[3], args[4], step_3d);
       matrix_mult(cs->data[cs->top], edges); // apply transformations
-      draw_polygons(edges, s, zb, c);
+      // draw_polygons(edges, s, zb, c);
+      draw_polygons(edges, s, zb, view, light, ambient, areflect, dreflect, sreflect);
       edges->lastcol = 0; // clear temporary polygon matrix
 
     } else if (strncmp(line, "box", strlen(line)) == 0) {
@@ -169,7 +170,8 @@ void parse_file ( char * filename,
       
       add_box(edges, *args, args[1], args[2], args[3], args[4], args[5]);
       matrix_mult(cs->data[cs->top], edges); // apply transformations
-      draw_polygons(edges, s, zb, c);
+      // draw_polygons(edges, s, zb, c);
+      draw_polygons(edges, s, zb, view, light, ambient, areflect, dreflect, sreflect);
       edges->lastcol = 0; // clear temporary polygon matrix
 
       /*
@@ -393,7 +395,6 @@ void parse_file ( char * filename,
 
     } else
       printf("%s: command not found\n", line);
-    free_stack(cs);
   } // end while loop
-  
+  free_stack(cs);
 } // end parse_file function

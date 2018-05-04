@@ -8,23 +8,47 @@
 
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
-  color i;
+  color i, a, d, s;
+
+  a = calculate_ambient(alight, areflect);
+  d = calculate_diffuse(light, dreflect, normal);
+  s = calculate_specular(light, sreflect, view, normal);
+
+  i.red = a.red + d.red + s.red;
+  i.green = a.green + d.green + s.green;
+  i.blue = a.blue + d.blue + s.blue;
   return i;
 }
 
 color calculate_ambient(color alight, double *areflect ) {
   color a;
+
+  a.red = alight.red * areflect[RED];
+  a.green = alight.green * areflect[GREEN];
+  a.blue = alight.blue * areflect[BLUE];
   return a;
 }
 
 color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
   color d;
+
+  // Placeholders (modify later):
+  d.red = 0;
+  d.green = 0;
+  d.blue = 0;
+  
   return d;
 }
 
 color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
 
   color s;
+
+  // Placeholders (modify later):
+  s.red = 0;
+  s.green = 0;
+  s.blue = 0;
+  
   return s;
 }
 
