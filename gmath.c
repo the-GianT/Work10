@@ -26,6 +26,12 @@ color calculate_ambient(color alight, double *areflect ) {
   a.red = alight.red * areflect[RED];
   a.green = alight.green * areflect[GREEN];
   a.blue = alight.blue * areflect[BLUE];
+
+  /*
+  printf("a.red: %d\n", a.red);
+  printf("a.green: %d\n", a.green);
+  printf("a.blue: %d\n", a.blue);
+  */
   return a;
 }
 
@@ -64,7 +70,7 @@ void normalize( double *vector ) {
 
 //Return the dot porduct of a . b
 double dot_product( double *a, double *b ) {
-  return 0;
+  return *a * *b + a[1] * b[1] + a[2] * b[2];
 }
 
 double *calculate_normal(struct matrix *polygons, int i) {
