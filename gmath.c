@@ -12,9 +12,9 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   double dp; // dot product of normalized normal vector and normalized light vector
 
   normalize(normal);
-  normalize(light[0]);
+  normalize(light[LOCATION]);
 
-  dp = dot_product(normal, light[0]);
+  dp = dot_product(normal, light[LOCATION]);
 
   a = calculate_ambient(alight, areflect);
   d = calculate_diffuse(light, dreflect, normal, dp);
@@ -23,6 +23,7 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   i.red = a.red + d.red + s.red;
   i.green = a.green + d.green + s.green;
   i.blue = a.blue + d.blue + s.blue;
+  limit_color(&i);
   return i;
 }
 
@@ -43,11 +44,16 @@ color calculate_ambient(color alight, double *areflect ) {
 
 color calculate_diffuse(double light[2][3], double *dreflect, double *normal, double dp ) {
   color d;
-
-  // Placeholders (modify later):
-  d.red = 0;
-  d.green = 0;
-  d.blue = 0;
+  
+  if (dp > 0) {
+    d.red = light[COLOR][RED] * dp;
+    d.green = light[COLOR][GREEN] * dp;
+    d.blue = light[COLOR][BLUE] * dp;
+  } else {
+    d.red = 0;
+    d.green = 0;
+    d.blue = 0;
+  }
   
   return d;
 }
