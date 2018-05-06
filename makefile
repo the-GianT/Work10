@@ -1,4 +1,4 @@
-OBJECTS= main.o draw.o display.o matrix.o parser.o gmath.o stack.o randRange.o
+OBJECTS= main.o draw.o display.o matrix.o parser.o gmath.o stack.o
 CFLAGS= -Wall -g
 LDFLAGS= -lm
 CC= gcc
@@ -12,7 +12,7 @@ main: $(OBJECTS)
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h
 	$(CC) -g -c main.c
 
-draw.o: draw.c draw.h display.h ml6.h matrix.h gmath.h randRange.h
+draw.o: draw.c draw.h display.h ml6.h matrix.h gmath.h
 	$(CC) $(CFLAGS) -c draw.c
 
 display.o: display.c display.h ml6.h matrix.h
@@ -29,9 +29,6 @@ gmath.o: gmath.c gmath.h matrix.h
 
 stack.o: stack.c stack.h matrix.h
 	$(CC) $(CFLAGS) -c stack.c
-
-randRange.o: randRange.c randRange.h
-	$(CC) $(CFLAGS) -c randRange.c
 
 clean:
 	rm *.o *~
