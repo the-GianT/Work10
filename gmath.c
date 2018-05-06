@@ -9,10 +9,16 @@
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
   color i, a, d, s;
+  double dp; // dot product of normalized normal vector and normalized light vector
+
+  normalize(normal);
+  normalize(light[0]);
+
+  dp = dot_product(normal, light[0]);
 
   a = calculate_ambient(alight, areflect);
-  d = calculate_diffuse(light, dreflect, normal);
-  s = calculate_specular(light, sreflect, view, normal);
+  d = calculate_diffuse(light, dreflect, normal, dp);
+  s = calculate_specular(light, sreflect, view, normal, dp);
 
   i.red = a.red + d.red + s.red;
   i.green = a.green + d.green + s.green;
@@ -35,7 +41,7 @@ color calculate_ambient(color alight, double *areflect ) {
   return a;
 }
 
-color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
+color calculate_diffuse(double light[2][3], double *dreflect, double *normal, double dp ) {
   color d;
 
   // Placeholders (modify later):
@@ -46,7 +52,7 @@ color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
   return d;
 }
 
-color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
+color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal, double dp ) {
 
   color s;
 
@@ -61,11 +67,24 @@ color calculate_specular(double light[2][3], double *sreflect, double *view, dou
 
 //limit each component of c to a max of 255
 void limit_color( color * c ) {
+  if (c->red > 255)
+    c->red = 255;
+  if (c->green > 255)
+    c->green = 255;
+  if (c->blue > 255)
+    c->blue = 255;
 }
 
 //vector functions
 //normalize vetor, should modify the parameter
 void normalize( double *vector ) {
+  double divisor; // what you're dividing each vector component by
+
+  divisor = sqrt(*vector * *vector + vector[1] * vector[1] + vector[2] * vector[2]);
+
+  *vector /= divisor;
+  vector[1] /= divisor;
+  vector[2] /= divisor;
 }
 
 //Return the dot porduct of a . b
