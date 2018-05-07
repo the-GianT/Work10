@@ -20,6 +20,7 @@ color calculate_ambient(color alight, double *areflect );
 color calculate_diffuse(double light[2][3], double *dreflect, double *normal, double dp );
 color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal, double dp );
 void limit_color( color * c );
+// color limit85(color c);
 
 //vector functions
 void normalize( double *vector );

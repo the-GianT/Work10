@@ -94,7 +94,7 @@ void parse_file ( char * filename,
   c.green = 0;
   c.blue = 0;
   step = 100;
-  step_3d = 10;
+  step_3d = 50;
   cs = new_stack();
 
   if ( strcmp(filename, "stdin") == 0 ) 

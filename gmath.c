@@ -39,6 +39,9 @@ color calculate_ambient(color alight, double *areflect ) {
   printf("a.green: %d\n", a.green);
   printf("a.blue: %d\n", a.blue);
   */
+  
+  // limit_color(&a);
+  // a = limit85(a);
   return a;
 }
 
@@ -46,15 +49,17 @@ color calculate_diffuse(double light[2][3], double *dreflect, double *normal, do
   color d;
   
   if (dp > 0) {
-    d.red = light[COLOR][RED] * dp;
-    d.green = light[COLOR][GREEN] * dp;
-    d.blue = light[COLOR][BLUE] * dp;
+    d.red = light[COLOR][RED] * dreflect[RED] * dp;
+    d.green = light[COLOR][GREEN] * dreflect[GREEN] * dp;
+    d.blue = light[COLOR][BLUE] * dreflect[BLUE] * dp;
   } else {
     d.red = 0;
     d.green = 0;
     d.blue = 0;
   }
-  
+
+  // limit_color(&d);
+  // d = limit85(d);
   return d;
 }
 
@@ -62,11 +67,48 @@ color calculate_specular(double light[2][3], double *sreflect, double *view, dou
 
   color s;
 
-  // Placeholders (modify later):
-  s.red = 0;
-  s.green = 0;
-  s.blue = 0;
-  
+  if (dp > 0) {
+    double sc; // scalar for normal vector
+    double resultant[3]; // vector that results from calculating 2(N dot L)N - L
+    double rdotv; // dot product of resultant and view
+    double multiplier; // rdotv raised to power of specular exponent
+
+    sc = 2 * dp;
+    *resultant = sc * *normal - *(light[LOCATION]);
+    resultant[1] = sc * normal[1] - light[LOCATION][1];
+    resultant[2] = sc * normal[2] - light[LOCATION][2];
+
+    /*
+    printf("resultant[0]: %lf\n", *resultant);
+    printf("resultant[1]: %lf\n", resultant[1]);
+    printf("resultant[2]: %lf\n", resultant[2]);
+    */
+
+    if ((rdotv = dot_product(resultant, view)) < 0) {
+      // printf("rdotv: %lf\n", rdotv);
+      rdotv = 0;
+    }
+    
+    multiplier = pow(rdotv, SPECULAR_EXP);
+
+    s.red = light[COLOR][RED] * sreflect[RED] * multiplier;
+    s.green = light[COLOR][GREEN] * sreflect[GREEN] * multiplier;
+    s.blue = light[COLOR][BLUE] * sreflect[BLUE] * multiplier;
+
+    /*
+    printf("s.red: %d\n", s.red);
+    printf("s.green: %d\n", s.green);
+    printf("s.blue: %d\n", s.blue);
+    */
+    
+  } else {
+    s.red = 0;
+    s.green = 0;
+    s.blue = 0;
+  }
+
+  // limit_color(&s);
+  // s = limit85(s);
   return s;
 }
 
@@ -80,6 +122,20 @@ void limit_color( color * c ) {
   if (c->blue > 255)
     c->blue = 255;
 }
+
+/*
+color limit85(color c)
+{
+  if (c.red > 85)
+    c.red = 85;
+  if (c.green > 85)
+    c.green = 85;
+  if (c.blue > 85)
+    c.blue = 85;
+
+  return c;
+}
+*/
 
 //vector functions
 //normalize vetor, should modify the parameter
